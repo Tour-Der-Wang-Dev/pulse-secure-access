@@ -29,6 +29,98 @@ export type Database = {
         }
         Relationships: []
       }
+      alerts: {
+        Row: {
+          created_at: string
+          description: string
+          employee_id: string | null
+          id: string
+          metadata: Json | null
+          resolved_at: string | null
+          resolved_by: string | null
+          status: Database["public"]["Enums"]["alert_status"]
+          title: string
+          type: Database["public"]["Enums"]["alert_type"]
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          employee_id?: string | null
+          id?: string
+          metadata?: Json | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: Database["public"]["Enums"]["alert_status"]
+          title: string
+          type: Database["public"]["Enums"]["alert_type"]
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          employee_id?: string | null
+          id?: string
+          metadata?: Json | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: Database["public"]["Enums"]["alert_status"]
+          title?: string
+          type?: Database["public"]["Enums"]["alert_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alerts_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alerts_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_logs: {
+        Row: {
+          action: Database["public"]["Enums"]["audit_action"]
+          created_at: string
+          details: Json
+          employee_id: string | null
+          id: string
+          ip_address: unknown | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: Database["public"]["Enums"]["audit_action"]
+          created_at?: string
+          details?: Json
+          employee_id?: string | null
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: Database["public"]["Enums"]["audit_action"]
+          created_at?: string
+          details?: Json
+          employee_id?: string | null
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_logs_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       colors: {
         Row: {
           blue: number | null
@@ -73,6 +165,132 @@ export type Database = {
           val_hsv?: number | null
         }
         Relationships: []
+      }
+      employees: {
+        Row: {
+          created_at: string
+          full_name: string
+          id: string
+          is_active: boolean
+          pin: string
+          rfid_code: string | null
+          role: Database["public"]["Enums"]["employee_role"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          full_name: string
+          id?: string
+          is_active?: boolean
+          pin: string
+          rfid_code?: string | null
+          role?: Database["public"]["Enums"]["employee_role"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          pin?: string
+          rfid_code?: string | null
+          role?: Database["public"]["Enums"]["employee_role"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      fuel_types: {
+        Row: {
+          created_at: string
+          id: string
+          is_available: boolean
+          name: string
+          price_per_liter: number
+          type: Database["public"]["Enums"]["fuel_type"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_available?: boolean
+          name: string
+          price_per_liter: number
+          type: Database["public"]["Enums"]["fuel_type"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_available?: boolean
+          name?: string
+          price_per_liter?: number
+          type?: Database["public"]["Enums"]["fuel_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      gas_transactions: {
+        Row: {
+          created_at: string
+          employee_id: string
+          fuel_amount: number
+          fuel_price_per_liter: number
+          fuel_type_id: string
+          id: string
+          notes: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          receipt_number: string | null
+          status: Database["public"]["Enums"]["transaction_status"]
+          stripe_payment_intent_id: string | null
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          employee_id: string
+          fuel_amount: number
+          fuel_price_per_liter: number
+          fuel_type_id: string
+          id?: string
+          notes?: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          receipt_number?: string | null
+          status?: Database["public"]["Enums"]["transaction_status"]
+          stripe_payment_intent_id?: string | null
+          total_amount: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          employee_id?: string
+          fuel_amount?: number
+          fuel_price_per_liter?: number
+          fuel_type_id?: string
+          id?: string
+          notes?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          receipt_number?: string | null
+          status?: Database["public"]["Enums"]["transaction_status"]
+          stripe_payment_intent_id?: string | null
+          total_amount?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gas_transactions_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gas_transactions_fuel_type_id_fkey"
+            columns: ["fuel_type_id"]
+            isOneToOne: false
+            referencedRelation: "fuel_types"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       nods_page: {
         Row: {
@@ -557,6 +775,19 @@ export type Database = {
       }
     }
     Enums: {
+      alert_status: "active" | "resolved" | "dismissed"
+      alert_type:
+        | "suspicious_activity"
+        | "excessive_cancellations"
+        | "unusual_amount"
+        | "failed_payments"
+      audit_action:
+        | "login"
+        | "logout"
+        | "transaction_created"
+        | "transaction_cancelled"
+        | "payment_processed"
+        | "alert_created"
       color_source:
         | "99COLORS_NET"
         | "ART_PAINTS_YG07S"
@@ -601,6 +832,9 @@ export type Database = {
         | "UNIVERSITY_OF_TEXAS_AT_AUSTIN"
         | "X11_WEB"
         | "XONA_COM"
+      employee_role: "cashier" | "admin" | "manager"
+      fuel_type: "gasoline" | "diesel" | "premium" | "super" | "ethanol"
+      payment_method: "cash" | "card" | "qr_code"
       stripe_order_status: "pending" | "completed" | "canceled"
       stripe_subscription_status:
         | "not_started"
@@ -612,6 +846,7 @@ export type Database = {
         | "canceled"
         | "unpaid"
         | "paused"
+      transaction_status: "pending" | "completed" | "cancelled" | "failed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -739,6 +974,21 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      alert_status: ["active", "resolved", "dismissed"],
+      alert_type: [
+        "suspicious_activity",
+        "excessive_cancellations",
+        "unusual_amount",
+        "failed_payments",
+      ],
+      audit_action: [
+        "login",
+        "logout",
+        "transaction_created",
+        "transaction_cancelled",
+        "payment_processed",
+        "alert_created",
+      ],
       color_source: [
         "99COLORS_NET",
         "ART_PAINTS_YG07S",
@@ -784,6 +1034,9 @@ export const Constants = {
         "X11_WEB",
         "XONA_COM",
       ],
+      employee_role: ["cashier", "admin", "manager"],
+      fuel_type: ["gasoline", "diesel", "premium", "super", "ethanol"],
+      payment_method: ["cash", "card", "qr_code"],
       stripe_order_status: ["pending", "completed", "canceled"],
       stripe_subscription_status: [
         "not_started",
@@ -796,6 +1049,7 @@ export const Constants = {
         "unpaid",
         "paused",
       ],
+      transaction_status: ["pending", "completed", "cancelled", "failed"],
     },
   },
 } as const
