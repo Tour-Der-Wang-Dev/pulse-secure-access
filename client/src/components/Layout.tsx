@@ -4,6 +4,8 @@ import { Card } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import { LogOut, User, Shield, Fuel, BarChart3, History, Home, TrendingUp, FileText, Settings } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitch from './LanguageSwitch';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,18 +15,19 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange }) => {
   const { employee, logout } = useAuth();
+  const { t } = useTranslation();
 
   if (!employee) return null;
 
   const isAdmin = employee.role === 'admin' || employee.role === 'manager';
 
   const navItems = [
-    { key: 'dashboard', label: 'Dashboard', icon: Home, show: true },
-    { key: 'payment', label: 'Payment', icon: Fuel, show: true },
-    { key: 'analytics', label: 'Analytics', icon: TrendingUp, show: isAdmin },
-    { key: 'reports', label: 'Reports', icon: FileText, show: isAdmin },
-    { key: 'admin', label: 'Settings', icon: Settings, show: isAdmin },
-    { key: 'audit', label: 'Audit', icon: History, show: isAdmin }
+    { key: 'dashboard', label: t('dashboard'), icon: Home, show: true },
+    { key: 'payment', label: t('payment'), icon: Fuel, show: true },
+    { key: 'analytics', label: t('analytics'), icon: TrendingUp, show: isAdmin },
+    { key: 'reports', label: t('reports'), icon: FileText, show: isAdmin },
+    { key: 'admin', label: t('settings'), icon: Settings, show: isAdmin },
+    { key: 'audit', label: t('audit'), icon: History, show: isAdmin }
   ] as const;
 
   const getRoleBadgeColor = (role: string) => {
@@ -70,8 +73,9 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange }) 
               )}
             </nav>
 
-            {/* User Info and Logout */}
+            {/* Language Switch and User Info */}
             <div className="flex items-center gap-3">
+              <LanguageSwitch />
               <div className="hidden sm:flex items-center gap-2">
                 <User className="w-4 h-4 text-muted-foreground" />
                 <div className="text-right">
@@ -88,7 +92,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange }) 
                 className="flex items-center gap-2"
               >
                 <LogOut className="w-4 h-4" />
-                <span className="hidden sm:inline">Logout</span>
+                <span className="hidden sm:inline">{t('logout')}</span>
               </Button>
             </div>
           </div>

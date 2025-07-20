@@ -6,7 +6,7 @@ import { relations } from "drizzle-orm";
 // Enums
 export const employeeRoleEnum = pgEnum("employee_role", ["cashier", "admin", "manager"]);
 export const fuelTypeEnum = pgEnum("fuel_type", ["gasoline", "diesel", "premium", "super", "ethanol"]);
-export const paymentMethodEnum = pgEnum("payment_method", ["cash", "card", "qr_code"]);
+export const paymentMethodEnum = pgEnum("payment_method", ["cash", "card", "qr_code", "promptpay"]);
 export const transactionStatusEnum = pgEnum("transaction_status", ["pending", "completed", "cancelled", "failed"]);
 export const auditActionEnum = pgEnum("audit_action", ["login", "logout", "transaction_created", "transaction_cancelled", "payment_processed", "alert_created"]);
 export const alertTypeEnum = pgEnum("alert_type", ["suspicious_activity", "excessive_cancellations", "unusual_amount", "failed_payments"]);
@@ -44,6 +44,7 @@ export const gasTransactions = pgTable("gas_transactions", {
   paymentMethod: paymentMethodEnum("payment_method").notNull(),
   status: transactionStatusEnum("status").notNull().default("pending"),
   stripePaymentIntentId: text("stripe_payment_intent_id"),
+  externalTransactionId: text("external_transaction_id"), // For QR/PromptPay transaction IDs
   receiptNumber: text("receipt_number").unique(),
   notes: text("notes"),
   createdAt: timestamp("created_at").notNull().defaultNow(),

@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertGasTransactionSchema, insertAuditLogSchema } from "@shared/schema";
 import { z } from "zod";
+import { thaiPaymentService } from "./services/ThaiPaymentService";
 
 // Request body validation schemas
 const loginSchema = z.object({
@@ -15,8 +16,9 @@ const transactionSchema = z.object({
   fuelAmount: z.number().transform(val => val.toString()),
   fuelPricePerLiter: z.number().transform(val => val.toString()),
   totalAmount: z.number().transform(val => val.toString()),
-  paymentMethod: z.enum(['cash', 'card', 'qr_code']),
+  paymentMethod: z.enum(['cash', 'card', 'qr_code', 'promptpay']),
   notes: z.string().nullable().optional(),
+  externalTransactionId: z.string().optional(),
 });
 
 const auditLogSchema = insertAuditLogSchema.extend({
@@ -232,6 +234,111 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating alert:", error);
       res.status(500).json({ error: "Failed to update alert" });
+    }
+  });
+
+  // Thai Payment API Endpoints
+  
+  // Generate PromptPay QR code
+  app.post("/api/payments/promptpay/generate", async (req: Request, res: Response) => {
+    try {
+      const { promptPayId, amount, ref1 } = req.body;
+      
+      if (!promptPayId || !amount) {
+        return res.status(400).json({ error: "PromptPay ID and amount are required" });
+      }
+
+      const result = await thaiPaymentService.generatePromptPayQR(
+        promptPayId,
+        parseFloat(amount),
+        ref1
+      );
+      
+      res.json(result);
+    } catch (error: any) {
+      console.error("Error generating PromptPay QR:", error);
+      res.status(500).json({ error: error.message || "Failed to generate PromptPay QR" });
+    }
+  });
+
+  // Generate Thai QR30 code
+  app.post("/api/payments/qr30/generate", async (req: Request, res: Response) => {
+    try {
+      const { merchantId, terminalId, amount, ref1, ref2 } = req.body;
+      
+      if (!merchantId || !terminalId || !amount) {
+        return res.status(400).json({ error: "Merchant ID, Terminal ID, and amount are required" });
+      }
+
+      const result = await thaiPaymentService.generateThaiQR30({
+        merchantId,
+        terminalId,
+        amount: parseFloat(amount),
+        ref1,
+        ref2
+      });
+      
+      res.json(result);
+    } catch (error: any) {
+      console.error("Error generating Thai QR30:", error);
+      res.status(500).json({ error: error.message || "Failed to generate Thai QR30" });
+    }
+  });
+
+  // Check payment status
+  app.get("/api/payments/status/:transactionRef", async (req: Request, res: Response) => {
+    try {
+      const { transactionRef } = req.params;
+      
+      const status = await thaiPaymentService.checkPaymentStatus(transactionRef);
+      res.json(status);
+    } catch (error: any) {
+      console.error("Error checking payment status:", error);
+      res.status(500).json({ error: error.message || "Failed to check payment status" });
+    }
+  });
+
+  // Process SCB payment
+  app.post("/api/payments/scb/process", async (req: Request, res: Response) => {
+    try {
+      const { amount, currency, reference } = req.body;
+      
+      if (!amount || !currency || !reference) {
+        return res.status(400).json({ error: "Amount, currency, and reference are required" });
+      }
+
+      const result = await thaiPaymentService.processSCBPayment({
+        amount: parseFloat(amount),
+        currency,
+        reference
+      });
+      
+      res.json(result);
+    } catch (error: any) {
+      console.error("Error processing SCB payment:", error);
+      res.status(500).json({ error: error.message || "Failed to process SCB payment" });
+    }
+  });
+
+  // Process KBank payment
+  app.post("/api/payments/kbank/process", async (req: Request, res: Response) => {
+    try {
+      const { amount, orderId, description } = req.body;
+      
+      if (!amount || !orderId) {
+        return res.status(400).json({ error: "Amount and order ID are required" });
+      }
+
+      const result = await thaiPaymentService.processKBankPayment({
+        amount: parseFloat(amount),
+        orderId,
+        description: description || ""
+      });
+      
+      res.json(result);
+    } catch (error: any) {
+      console.error("Error processing KBank payment:", error);
+      res.status(500).json({ error: error.message || "Failed to process KBank payment" });
     }
   });
 

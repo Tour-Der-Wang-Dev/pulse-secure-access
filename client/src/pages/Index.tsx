@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import Login from '@/components/Login';
 import Layout from '@/components/Layout';
-import PaymentForm from '@/components/PaymentForm';
+import EnhancedPaymentForm from '@/components/EnhancedPaymentForm';
 import Dashboard from './Dashboard';
 import Analytics from './Analytics';
 import Reports from './Reports';
@@ -31,7 +31,7 @@ const Index = () => {
       case 'dashboard':
         return <Dashboard />;
       case 'payment':
-        return <PaymentForm />;
+        return <EnhancedPaymentForm />;
       case 'analytics':
         return <Analytics />;
       case 'reports':
