@@ -2,13 +2,13 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
-import { LogOut, User, Shield, Fuel, BarChart3, History } from 'lucide-react';
+import { LogOut, User, Shield, Fuel, BarChart3, History, Home, TrendingUp, FileText, Settings } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface LayoutProps {
   children: React.ReactNode;
-  currentPage: 'dashboard' | 'payment' | 'admin' | 'audit';
-  onPageChange: (page: 'dashboard' | 'payment' | 'admin' | 'audit') => void;
+  currentPage: 'dashboard' | 'payment' | 'analytics' | 'reports' | 'admin' | 'audit';
+  onPageChange: (page: 'dashboard' | 'payment' | 'analytics' | 'reports' | 'admin' | 'audit') => void;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange }) => {
@@ -19,9 +19,12 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange }) 
   const isAdmin = employee.role === 'admin' || employee.role === 'manager';
 
   const navItems = [
+    { key: 'dashboard', label: 'Dashboard', icon: Home, show: true },
     { key: 'payment', label: 'Payment', icon: Fuel, show: true },
-    { key: 'admin', label: 'Admin Dashboard', icon: BarChart3, show: isAdmin },
-    { key: 'audit', label: 'Audit Logs', icon: History, show: isAdmin }
+    { key: 'analytics', label: 'Analytics', icon: TrendingUp, show: isAdmin },
+    { key: 'reports', label: 'Reports', icon: FileText, show: isAdmin },
+    { key: 'admin', label: 'Settings', icon: Settings, show: isAdmin },
+    { key: 'audit', label: 'Audit', icon: History, show: isAdmin }
   ] as const;
 
   const getRoleBadgeColor = (role: string) => {

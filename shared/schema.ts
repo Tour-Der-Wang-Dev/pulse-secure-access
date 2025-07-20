@@ -132,6 +132,10 @@ export const insertGasTransactionSchema = createInsertSchema(gasTransactions).om
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  fuelAmount: z.coerce.string(),
+  fuelPricePerLiter: z.coerce.string(),
+  totalAmount: z.coerce.string(),
 });
 
 export const insertAuditLogSchema = createInsertSchema(auditLogs).omit({

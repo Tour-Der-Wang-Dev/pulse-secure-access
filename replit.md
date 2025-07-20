@@ -1,62 +1,69 @@
 # Gas Station Management System
 
-## Overview
-A comprehensive gas station management system with employee authentication, fuel transaction processing, and audit logging. Successfully migrated from Lovable/Supabase to Replit environment with proper security practices and client/server separation.
+## Project Overview
+A comprehensive gas station management system built with React/TypeScript frontend and Node.js/Express backend, using PostgreSQL with Drizzle ORM. The system handles employee authentication, fuel transactions, payment processing, and audit logging.
 
-## Project Architecture
-- **Frontend**: React + TypeScript with Vite
-- **Backend**: Express.js with TypeScript
+## Recent Changes (January 2025)
+- ✅ Successfully migrated from Lovable/Supabase to Replit environment
+- ✅ Implemented secure client/server separation architecture
+- ✅ Replaced Supabase with Neon PostgreSQL database using Drizzle ORM
+- ✅ Created comprehensive API routes for authentication and transactions
+- ✅ Added proper schema validation and error handling
+- ✅ Seeded database with fuel types and test employees
+- ✅ **Added Advanced Features**: Dashboard, Analytics, and Reports pages
+- ✅ Fixed transaction validation issues with decimal number handling
+- ✅ Enhanced navigation with role-based access control
+
+## Current Architecture
+
+### Backend (Server)
+- **Framework**: Express.js with TypeScript
 - **Database**: PostgreSQL (Neon) with Drizzle ORM
 - **Authentication**: PIN-based employee login system
-- **Styling**: Tailwind CSS with shadcn/ui components
+- **API Routes**: RESTful endpoints under `/api/*`
+- **Security**: Input validation with Zod schemas
 
-## Key Features
-- Employee authentication with PIN codes
-- Fuel type management with pricing
-- Transaction processing with multiple payment methods (cash, card, QR code)
-- Audit logging for security and compliance
-- Real-time transaction receipts
-- Role-based access (cashier, manager, admin)
+### Frontend (Client)  
+- **Framework**: React with TypeScript
+- **Routing**: React Router DOM
+- **State Management**: TanStack React Query
+- **UI Components**: shadcn/ui with Tailwind CSS
+- **Forms**: react-hook-form with Zod validation
 
-## Database Schema
-- **employees**: Employee records with roles and authentication
+### Database Schema
+- **employees**: PIN-based authentication, roles (admin/manager/cashier)
 - **fuel_types**: Available fuel products with pricing
 - **gas_transactions**: Complete transaction records
 - **audit_logs**: Security and activity logging
-- **alerts**: Fraud detection and monitoring
-
-## API Endpoints
-- `POST /api/auth/login` - Employee authentication
-- `POST /api/auth/logout` - Session termination
-- `GET /api/fuel-types` - Available fuel products
-- `POST /api/transactions` - Process new transactions
-- `GET /api/audit-logs` - Security audit trails (admin only)
-- `GET /api/alerts` - System alerts (admin only)
-
-## Recent Changes
-- **2025-01-20**: Successfully migrated from Supabase to Neon PostgreSQL
-- **2025-01-20**: Implemented Drizzle ORM for type-safe database operations
-- **2025-01-20**: Created secure API routes with proper validation
-- **2025-01-20**: Removed all Supabase dependencies and client-side database calls
-- **2025-01-20**: Added seed data for fuel types and test employees
-
-## Security Features
-- Server-side authentication and authorization
-- Secure API endpoints with request validation
-- Audit logging for all critical operations
-- No direct database access from frontend
-- Environment variable protection for sensitive data
+- **alerts**: System notifications and warnings
 
 ## Test Credentials
-- Admin: PIN 1234
-- Manager: PIN 5678  
-- Cashier: PIN 9999
+- Admin: PIN `1234`
+- Manager: PIN `5678` 
+- Cashier: PIN `9999`
 
 ## User Preferences
-None specified yet.
+- Communication: Professional, concise, technical explanations
+- Code Style: TypeScript strict mode, proper error handling
+- Architecture: Strong client/server separation, secure API design
+- Focus: Security, fraud prevention, audit trails
 
-## Development Notes
-- All database operations handled server-side for security
-- Frontend uses React Query for efficient API state management
-- Full TypeScript coverage for type safety
-- Follows Replit deployment best practices
+## Development Status
+Current version is fully functional with:
+- Employee authentication with role-based access
+- Fuel transaction processing with validation
+- Real-time payment simulation
+- Comprehensive audit logging
+- Transaction receipt generation
+- **Advanced Dashboard**: Real-time metrics and performance indicators
+- **Analytics Module**: Business intelligence and trend analysis (Admin/Manager only)
+- **Reports System**: Detailed reporting with export capabilities (Admin/Manager only)
+- Role-based navigation (Dashboard/Payment for all, Analytics/Reports for managers+)
+
+## Advanced Features Details
+- **Dashboard**: Shows daily revenue, transaction counts, recent activity, and role-specific insights
+- **Analytics**: Revenue trends, fuel type distribution, payment method analysis, peak hours tracking
+- **Reports**: Comprehensive reporting with filters, audit log preview, active alerts monitoring
+- **Access Control**: Cashiers see dashboard and payment; Managers/Admins access full feature set
+
+Next phase: Additional security enhancements and advanced analytics as needed.

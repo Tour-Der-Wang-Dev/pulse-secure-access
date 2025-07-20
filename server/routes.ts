@@ -9,8 +9,14 @@ const loginSchema = z.object({
   pin: z.string().min(1, "PIN is required"),
 });
 
-const transactionSchema = insertGasTransactionSchema.extend({
-  notes: z.string().optional(),
+const transactionSchema = z.object({
+  employeeId: z.string(),
+  fuelTypeId: z.string(),
+  fuelAmount: z.number().transform(val => val.toString()),
+  fuelPricePerLiter: z.number().transform(val => val.toString()),
+  totalAmount: z.number().transform(val => val.toString()),
+  paymentMethod: z.enum(['cash', 'card', 'qr_code']),
+  notes: z.string().nullable().optional(),
 });
 
 const auditLogSchema = insertAuditLogSchema.extend({
